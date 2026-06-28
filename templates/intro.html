@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Darkside Transmission</title>
+
+    <style>
+
+        body{
+            margin:0;
+            background:rgb(16, 16, 16);
+            overflow:hidden;
+        }
+
+        video{
+            width:100vw;
+            height:100vh;
+            object-fit:cover;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<video id="intro-video" autoplay>
+
+    <source
+    src="{{ url_for('static', filename='video/darkside.mp4') }}"
+    type="video/mp4">
+
+</video>
+
+<script>
+
+const video = document.getElementById("intro-video");
+
+video.onended = function(){
+
+    window.location.href = "/projects";
+
+}
+
+</script>
+
+</body>
+</html>

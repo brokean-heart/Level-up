@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="contact">
+
+    <h1>CONTACT US</h1>
+
+    <p class="subtitle">
+        Have a question or want to connect? Send a message.
+    </p>
+
+    <form action="/contact" method="POST" class="contact-form">
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            required>
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            required>
+
+        <textarea
+            name="message"
+            rows="6"
+            placeholder="Your Message"
+            required></textarea>
+
+        <button type="submit">
+            SEND MESSAGE
+        </button>
+
+    </form>
+
+</section>
+
+{% endblock %}

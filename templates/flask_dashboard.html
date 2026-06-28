@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#050816;
+    color:#fff;
+    overflow-x:hidden;
+}
+
+/* Main Layout */
+
+.dashboard{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    min-height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+    position:fixed;
+    width:320px;
+    height:100vh;
+    background:rgba(7,12,30,.85);
+    backdrop-filter:blur(20px);
+    border-right:1px solid rgba(255,255,255,.08);
+    padding:30px;
+}
+
+.logo{
+    font-size:2rem;
+    font-weight:700;
+    color:#4ea1ff;
+    margin-bottom:10px;
+}
+
+.tagline{
+    color:#bdbdbd;
+    margin-bottom:40px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#fff;
+    padding:18px;
+    border-radius:15px;
+    transition:.3s;
+}
+
+.menu a:hover{
+    background:rgba(78,161,255,.15);
+    border:1px solid rgba(78,161,255,.3);
+}
+
+.active{
+    background:linear-gradient(
+    90deg,
+    rgba(78,161,255,.2),
+    rgba(157,78,221,.2));
+}
+
+/* Main Content */
+
+.main{
+    margin-left:320px;
+    padding:30px;
+}
+
+/* Search */
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.search{
+    width:420px;
+    padding:16px 25px;
+    border:none;
+    border-radius:50px;
+    background:rgba(255,255,255,.06);
+    color:#fff;
+    backdrop-filter:blur(10px);
+}
+
+.theme-btn{
+    padding:15px 25px;
+    border:none;
+    border-radius:15px;
+    background:rgba(255,255,255,.06);
+    color:white;
+    cursor:pointer;
+}
+
+/* Hero */
+
+.hero{
+    margin-top:50px;
+}
+
+.hero h1{
+    font-size:4rem;
+    font-weight:800;
+    line-height:1.1;
+}
+
+.gradient{
+    background:linear-gradient(
+    90deg,
+    #4ea1ff,
+    #9d4edd);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    margin-top:15px;
+    color:#d0d0d0;
+    font-size:1.2rem;
+}
+
+/* Main Card */
+
+.flask-card{
+    margin-top:40px;
+    padding:35px;
+    border-radius:30px;
+    background:rgba(10,15,40,.75);
+    backdrop-filter:blur(25px);
+    border:1px solid rgba(255,255,255,.08);
+
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:30px;
+}
+
+.flask-card h2{
+    font-size:2.2rem;
+    color:#8b5cf6;
+    margin-bottom:20px;
+}
+
+.flask-card p{
+    color:#d4d4d4;
+    line-height:1.8;
+}
+
+.code-box{
+    background:#090d1f;
+    border-radius:20px;
+    padding:25px;
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.code-box pre{
+    color:#67e8f9;
+    overflow:auto;
+}
+
+/* Learning Path */
+
+.roadmap{
+    margin-top:35px;
+    padding:30px;
+    border-radius:30px;
+    background:rgba(10,15,40,.75);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.roadmap h2{
+    margin-bottom:30px;
+}
+
+.steps{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.step{
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    border:2px solid #4ea1ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.4rem;
+}
+
+.step.active{
+    background:linear-gradient(
+    135deg,
+    #4ea1ff,
+    #9d4edd);
+    border:none;
+}
+
+/* Start Button */
+
+.start-box{
+    margin-top:35px;
+    padding:30px;
+    border-radius:30px;
+    background:linear-gradient(
+    90deg,
+    rgba(78,161,255,.15),
+    rgba(157,78,221,.15));
+}
+
+.start-btn{
+    margin-top:20px;
+    padding:16px 40px;
+    border:none;
+    border-radius:15px;
+    background:linear-gradient(
+    90deg,
+    #4ea1ff,
+    #9d4edd);
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+}
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+
+    <aside class="sidebar">
+        ...
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            Search
+            Dark Mode
+        </header>
+
+        <section class="hero">
+            Welcome
+        </section>
+
+        <section class="flask-card">
+            What is Flask
+        </section>
+
+        <section class="roadmap">
+            Learning Path
+        </section>
+
+    </main>
+
+</div>
+</body>
+</html>

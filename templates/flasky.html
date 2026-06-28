@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Learner Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            /* Isko pure white (#ffffff) kiya taaki text dull na lage */
+            --text-color: #ffffff;
+
+            /* Panels ko thoda aur dark background diya taaki piche ki image text ko kharab na kare */
+            --panel-bg: rgba(13, 17, 23, 0.85);
+            --code-panel-bg: rgba(22, 27, 34, 0.9);
+
+            /* Neon Cyan aur Purple ko thoda aur bright kiya */
+            --accent-cyan: #00f0ff;
+            --accent-purple: #c084fc;
+            --accent-green: #4ade80;
+
+            --code-keyword: #ff7b72;
+            --code-string: #a5d6ff;
+            --code-import: #d2a8ff;
+            --code-decorator: #ffa657;
+            --sidebar-width: 280px;
+        }
+
+        /* FLASK LEARNER Center Heading Customization */
+        .brand-highlight {
+            font-size: 2.6rem;
+            /* Size thoda sa bada kiya robust look ke liye */
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #a836cbd5;
+            /* Sharp White Color */
+            line-height: 1;
+            /* Text par neon glow effect text ko dull hone se bachayega */
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(0, 240, 255, 0.2);
+        }
+
+        /* Glass panel background ko thoda aur visible karne ke liye border tweak */
+        .glass-panel {
+            background-color: rgba(15, 23, 42, 0.75);
+            /* Darker overlay */
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            /* Brighter sleek border */
+            border-radius: 12px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            /* Heavy blur effect */
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            /* FIXED: Background image setup linked to your file */
+            background-image: linear-gradient(rgba(13, 17, 23, 0.45), rgba(13, 17, 23, 0.45)), url('static/image/abc.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            background-attachment: fixed;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: rgba(22, 27, 34, 0.85);
+            border-right: 1px solid rgba(48, 54, 61, 0.6);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            backdrop-filter: blur(8px);
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .brand-icon {
+            width: 32px;
+            height: 32px;
+            background-color: var(--accent-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+
+        .brand-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .brand-title span {
+            color: var(--accent-cyan);
+        }
+
+        .menu-list {
+            list-style: none;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .menu-item {
+            margin-bottom: 4px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            color: #8b949e;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-link:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+        }
+
+        .menu-link.active {
+            background-color: rgba(34, 211, 238, 0.15);
+            color: var(--accent-cyan);
+            font-weight: 500;
+        }
+
+        .menu-item-icon {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+            color: var(--accent-cyan);
+        }
+
+        .progress-box {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(48, 54, 61, 0.6);
+        }
+
+        .progress-title {
+            font-size: 0.8rem;
+            color: #8b949e;
+            margin-bottom: 6px;
+        }
+
+        .progress-track {
+            height: 6px;
+            background-color: #30363d;
+            border-radius: 3px;
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 10%;
+            background-color: var(--accent-cyan);
+            border-radius: 3px;
+        }
+
+        .progress-text {
+            font-size: 0.75rem;
+            color: #8b949e;
+        }
+
+        .keep-learning-card {
+            background-color: rgba(31, 41, 55, 0.8);
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* FIXED: Made transparent so abc.png layout is visible underneath */
+        .cosmic-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(168, 85, 247, 0.15), transparent),
+                radial-gradient(circle at 80% 20%, rgba(34, 211, 238, 0.15), transparent),
+                radial-gradient(circle at 50% 50%, rgba(10, 185, 129, 0.05), transparent);
+            background-color: transparent;
+            z-index: -1;
+        }
+
+        .top-navbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 8px 16px 8px 36px;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            outline: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b949e;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        /* Main Header layout adjustment */
+        .main-header h1 {
+            font-size: 1.05rem;
+            color: #8a8f92;
+            font-weight: 400;
+            margin-bottom: 2px;
+            text-transform: capitalize;
+        }
+
+        /* FIXED: Added a layout wrapper for center heading and logo integration */
+        .heading-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Short gap between logo and text */
+            margin-top: 4px;
+            margin-bottom: 6px;
+        }
+
+        /* Exact Science/Lab Flask SVG icon configuration */
+        .flask-center-icon {
+            width: 42px;
+            height: 42px;
+            background: transparent;
+            filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.65));
+        }
+
+        .brand-highlight {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--text-color);
+            line-height: 1;
+        }
+
+        .sub-header {
+            color: #8b949e;
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+
+        /* --- Dashboard Panel Section (Glassmorphism Look) --- */
+        .info-panels {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .glass-panel {
+            background-color: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .section-header {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-header-icon {
+            width: 22px;
+            height: 22px;
+        }
+
+        .section-description {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .why-flask-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: var(--text-color);
+        }
+
+        .why-flask-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .why-flask-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        .why-flask-item-icon {
+            color: var(--accent-green);
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        /* --- Code Block --- */
+        .code-block {
+            background-color: var(--code-panel-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 18px;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            color: #d1d5db;
+        }
+
+        .code-keyword {
+            color: var(--code-keyword);
+        }
+
+        .code-import {
+            color: var(--code-import);
+        }
+
+        .code-decorator {
+            color: var(--code-decorator);
+        }
+
+        .code-function {
+            color: #a5d6ff;
+        }
+
+        .code-string {
+            color: var(--code-string);
+        }
+
+        .code-builtin {
+            color: var(--accent-cyan);
+        }
+
+        /* --- Mastery Dashboard Panel --- */
+        .mastery-grid-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .mastery-dashboard {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .progress-circle-group {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto;
+        }
+
+        .mastery-progress-svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 10;
+        }
+
+        .progress-circle-fill {
+            fill: none;
+            stroke: var(--accent-green);
+            stroke-width: 10;
+            stroke-linecap: round;
+            stroke-dasharray: 471.2;
+            stroke-dashoffset: 0;
+            /* 100% full circle */
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+        .progress-circle-text-group {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--accent-green);
+        }
+
+        .progress-circle-percent {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .progress-circle-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .completion-bullets-panel {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            padding: 0 30px;
+        }
+
+        .completion-bullet-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .check-icon {
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        .certificate-panel {
+            margin-top: 10px;
+        }
+
+        .certificate-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--accent-cyan);
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .certificate-button:hover {
+            background-color: #06b6d4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="brand-section">
+            <div class="brand-icon">f</div>
+            <div class="brand-title">Flask<span>Learner</span></div>
+        </div>
+
+        <ul class="menu-list">
+            <li class="menu-item"><a href="#" class="menu-link active"><span class="menu-item-icon">🏠</span> Home</a>
+            </li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">📄</span> 1.
+                    Introduction</a></li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">⬇️</span> 2.
+                    Installation</a></li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">💻</span> 3. Your First
+                    App</a></li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">🔗</span> 4. Routes</a>
+            </li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">📁</span> 5. Templates</a>
+            </li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">📂</span> 6. Static
+                    Files</a></li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">📝</span> 7. Forms</a></li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">👥</span> 8. Database</a>
+            </li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">⚙️</span> 9. Projects</a>
+            </li>
+            <li class="menu-item"><a href="#" class="menu-link"><span class="menu-item-icon">🚀</span> 10.
+                    Deployment</a></li>
+        </ul>
+
+        <div class="progress-box">
+            <div class="progress-title">YOUR PROGRESS</div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">1 of 10 Completed (10%)</div>
+            <div class="keep-learning-card">
+                ✨ Keep learning, keep building, you'll master Flask!
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="cosmic-bg"></div>
+
+        <header class="top-navbar">
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search topics...">
+            </div>
+            <div class="theme-toggle">
+                🌙 Dark Mode
+            </div>
+        </header>
+
+        <section class="main-header">
+            <h1>Welcome to</h1>
+
+            <div class="heading-logo-container">
+                <div class="brand-highlight">FLASK LEARNER</div>
+                <svg class="flask-center-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9 3H15M10 3V8.462C10 9.043 9.814 9.609 9.471 10.079L5.414 15.656C4.425 17.016 5.394 19 7.065 19H16.935C18.606 19 19.575 17.016 18.586 15.656L14.529 10.079C14.186 9.609 14 9.043 14 8.462V3"
+                        stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M7.5 15H16.5" stroke="#a855f7" stroke-width="1.5" stroke-linecap="round"
+                        stroke-dasharray="1 2" />
+                </svg>
+            </div>
+
+            <p class="sub-header">Learn Flask from basics to advanced 🚀</p>
+        </section>
+
+        <div class="info-panels">
+
+            <section class="glass-panel">
+                <div class="section-header">
+                    <svg class="section-header-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9 3H15M10 3V8.462C10 9.043 9.814 9.609 9.471 10.079L5.414 15.656C4.425 17.016 5.394 19 7.065 19H16.935C18.606 19 19.575 17.016 18.586 15.656L14.529 10.079C14.186 9.609 14 9.043 14 8.462V3"
+                            stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    What is Flask?
+                </div>
+                <p class="section-description">
+                    Flask is a lightweight Python web framework. It is easy to learn, flexible, and perfect for building
+                    web applications.
+                </p>
+
+                <div class="feature-grid">
+                    <div>
+                        <div class="why-flask-title">Why Flask?</div>
+                        <ul class="why-flask-list">
+                            <li class="why-flask-item"><span class="why-flask-item-icon">✓</span> Simple and easy to get
+                                started</li>
+                            <li class="why-flask-item"><span class="why-flask-item-icon">✓</span> Flexible and scalable
+                            </li>
+                            <li class="why-flask-item"><span class="why-flask-item-icon">✓</span> Large community
+                                support</li>
+                            <li class="why-flask-item"><span class="why-flask-item-icon">✓</span> Perfect for beginners
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div><span class="code-keyword">from</span> flask <span class="code-keyword">import</span> <span
+                                class="code-import">Flask</span></div>
+                        <div>app = <span class="code-import">Flask</span>(<span class="code-builtin">__name__</span>)
+                        </div>
+                        <br>
+                        <div><span class="code-decorator">@app.route</span>(<span class="code-string">'/'</span>)</div>
+                        <div><span class="code-keyword">def</span> <span class="code-function">home</span>():</div>
+                        <div> <span class="code-keyword">return</span> <span class="code-string">'Hello, Flask!'</span>
+                        </div>
+                        <br>
+                        <div><span class="code-keyword">if</span> <span class="code-builtin">__name__</span> == <span
+                                class="code-string">'__main__'</span>:</div>
+                        <div> app.run(debug=<span class="code-builtin">True</span>)</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-panel">
+                <div class="section-header">
+                    <span>🏆</span> Mastery Dashboard
+                </div>
+
+                <div class="mastery-grid-wrapper">
+                    <div class="mastery-dashboard">
+                        <div class="progress-circle-group">
+                            <svg class="mastery-progress-svg" width="160" height="160" viewBox="0 0 160 160">
+                                <circle class="progress-circle-bg" cx="80" cy="80" r="75"></circle>
+                                <circle class="progress-circle-fill" cx="80" cy="80" r="75"></circle>
+                            </svg>
+                            <div class="progress-circle-text-group">
+                                <div class="progress-circle-percent">100%</div>
+                                <div class="progress-circle-label">MASTERED</div>
+                            </div>
+                        </div>
+
+                        <ul class="completion-bullets-panel">
+                            <li class="completion-bullet-item"><span class="check-icon">✓</span> You have successfully
+                                built a full Flask application.</li>
+                            <li class="completion-bullet-item"><span class="check-icon">✓</span> You are now proficient
+                                in using Flask extensions.</li>
+                            <li class="completion-bullet-item"><span class="check-icon">✓</span> Final Assessment Passed
+                                (Score: 98%).</li>
+                        </ul>
+
+                        <div class="certificate-panel">
+                            <button class="certificate-button">
+                                🎓 Get Your Certificate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>

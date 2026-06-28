@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <title>
+            <link rel="icon"
+          type="image/png"
+          href="{{ url_for('static', filename='fav.png') }}">
+    </title>
+</head>
+
+<section class="about">
+
+    <h1>ABOUT DARKSIDE</h1>
+
+    <p class="subtitle">
+        Where technology meets creativity and curiosity.
+    </p>
+
+    <div class="about-card">
+
+        <h2>Who We Are</h2>
+
+        <p>
+            DARKSIDE is a modern platform focused on learning,
+            innovation, cybersecurity, and web development.
+            Our goal is to explore technology, build projects,
+            and continuously improve our skills.
+        </p>
+
+    </div>
+
+    <div class="about-card">
+
+        <h2>Our Mission</h2>
+
+        <p>
+            To transform ideas into real-world projects while
+            learning practical development and security concepts.
+        </p>
+
+    </div>
+
+    <div class="about-card">
+
+        <h2>Our Vision</h2>
+
+        <p>
+            Build, learn, experiment, and create a portfolio
+            that demonstrates technical excellence.
+        </p>
+
+    </div>
+
+</section>
+<section class="journey">
+
+    <h2>OUR JOURNEY</h2>
+
+    <div class="timeline">
+
+        <div class="item">
+            <h3>2026</h3>
+            <p>Started building the DARKSIDE platform with Flask.</p>
+        </div>
+
+        <div class="item">
+            <h3>Learning</h3>
+            <p>Exploring web development and cybersecurity through real projects.</p>
+        </div>
+
+        <div class="item">
+            <h3>Future</h3>
+            <p>Creating secure applications and expanding into advanced technologies.</p>
+        </div>
+
+    </div>
+
+</section>
+<section class="stats">
+
+    <h2>OUR STATS</h2>
+
+    <div class="stats-container">
+
+        <div class="stat-card">
+            <h1>50+</h1>
+            <p>Projects Planned</p>
+        </div>
+
+        <div class="stat-card">
+            <h1>6</h1>
+            <p>Months Learning Goal</p>
+        </div>
+
+        <div class="stat-card">
+            <h1>100%</h1>
+            <p>Hands-on Practice</p>
+        </div>
+
+        <div class="stat-card">
+            <h1>24/7</h1>
+            <p>Curiosity & Growth</p>
+        </div>
+
+    </div>
+
+</section>
+<section class="skills">
+
+    <h2>MY SKILLS</h2>
+
+    <div class="skill">
+
+        <span>Python</span>
+
+        <div class="bar">
+            <div class="fill python"></div>
+        </div>
+
+    </div>
+
+    <div class="skill">
+
+        <span>Flask</span>
+
+        <div class="bar">
+            <div class="fill flask"></div>
+        </div>
+
+    </div>
+
+    <div class="skill">
+
+        <span>Linux</span>
+
+        <div class="bar">
+            <div class="fill linux"></div>
+        </div>
+
+    </div>
+
+    <div class="skill">
+
+        <span>Cybersecurity</span>
+
+        <div class="bar">
+            <div class="fill cyber"></div>
+        </div>
+
+    </div>
+    <h1>FIND ME</h1>
+    <footer>
+    <a href="https://www.facebook.com" target="_blank"class="btn">
+        FACEBOOK
+    </a>
+    <a href="https://www.instagram.com" target="_blank" class="btn">
+        INSTAGRAM
+    </a>
+    <a href="https://github.com/brokean-heart" target="_blank" class="btn">
+        GITHUB
+    </a>
+    <a href="https://www.google.com" target="_blank" class="btn">
+        GOOGLE
+    </a>
+    <footer>
+
+</section>
+
+{% endblock %}
